@@ -27,8 +27,55 @@
 <link href="assets/css/responsive.css" rel="stylesheet">
 
 </head>
-
-
+<style>
+    body.modal-open {
+        overflow: hidden;
+    }
+    
+    .video-modal {
+        display: none;
+        position: fixed;
+        z-index: 999;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .video-container {
+        position: relative;
+        width: 360px;
+        height: 640px;
+        background: black;
+        overflow: hidden;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform: translateZ(0);
+        will-change: transform;
+    }
+    
+    video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* or 'contain' if you want to fit */
+        display: block;
+        transform: translateZ(0);
+    }
+    
+    .close-video {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 30px;
+        color: white;
+        cursor: pointer;
+        z-index: 2;
+    }
+    </style>
+    
 <!-- page wrapper -->
 <body>
 
@@ -580,9 +627,16 @@
                                     <li><i class="fas fa-star"></i></li>
                                 </ul>
                                 <p>Bulak Suu KG обеспечивает надежные и качественные системы фильтрации. Результат превзошел все ожидания!</p>
-                                <h5>Асанбек</h5>
+                                <h5>Мелис</h5>
                                 <span class="designation">Дизайнер</span>
                             </div>
+
+                            <div class="btn-box">
+                                <a href="javascript:void(0)" class="theme-btn btn-one open-video-btn" data-video="assets/videos/melis.mp4">
+                                    ▶ Посмотреть видео
+                                </a>
+                            </div>
+
                         </div>
                     </div>
                     <div class="testimonial-block-one">
@@ -600,6 +654,11 @@
                                 <h5>Бакыт</h5>
                                 <span class="designation">Основатель и генеральный директор</span>
                             </div>
+                            <div class="btn-box">
+                                <a href="javascript:void(0)" class="theme-btn btn-one open-video-btn" data-video="assets/videos/bakyt.mp4">
+                                    ▶ Посмотреть видео
+                                </a>
+                            </div>
                         </div>
                     </div>
                     <div class="testimonial-block-one">
@@ -616,6 +675,11 @@
                                 <p>Отличное обслуживание и качественные фильтры, которые обеспечивают чистую воду в нашем доме.</p>
                                 <h5>Нурлан</h5>
                                 <span class="designation">Менеджер</span>
+                            </div>
+                            <div class="btn-box">
+                                <a href="javascript:void(0)" class="theme-btn btn-one open-video-btn" data-video="assets/videos/nurlan.mp4">
+                                    ▶ Посмотреть видео
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -732,7 +796,7 @@
                 </div>
             </div>
         </section>
-        
+            
         <!-- cta-section end -->
 
 
@@ -928,6 +992,53 @@
         </button>
     </div>
 
+    <div id="video-modal" class="video-modal">
+        <div class="video-container">
+            <span class="close-video">&times;</span>
+            <video id="local-video" controls preload="metadata" playsinline muted>
+                <source src="" type="video/mp4">
+                Ваш браузер не поддерживает видео.
+            </video>
+        </div>
+    </div>        
+
+    <script>
+        const modal = document.getElementById('video-modal');
+        const video = document.getElementById('local-video');
+        const source = video.querySelector('source');
+        const closeBtn = document.querySelector('.close-video');
+        
+        document.querySelectorAll('.open-video-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const videoSrc = btn.getAttribute('data-video');
+                source.src = videoSrc;
+                video.load();
+        
+                document.body.classList.add('modal-open');
+                modal.style.display = 'flex';
+        
+                setTimeout(() => {
+                    video.play();
+                }, 50); // небольшая задержка помогает стабильности
+            });
+        });
+        
+        closeBtn.addEventListener('click', () => {
+            video.pause();
+            modal.style.display = 'none';
+            document.body.classList.remove('modal-open');
+            source.src = ''; // очищаем, чтобы сбросить
+        });
+        
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                video.pause();
+                modal.style.display = 'none';
+                document.body.classList.remove('modal-open');
+                source.src = '';
+            }
+        });
+    </script>
 
     <!-- jequery plugins -->
     <script src="assets/js/jquery.js"></script>
